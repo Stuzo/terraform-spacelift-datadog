@@ -5,7 +5,7 @@ package spacelift
 # and not for runs that are still in progress. Additionally, no data will be
 # generated for runs that never saw any action, i.e. runs that were created and
 # canceled, though approval policy failures will be reported.
-terminal := {"FAILED", "FINISHED", "DISCARDED", "STOPPED"}
+terminal := {"FAILED", "FINISHED", "DISCARDED", "STOPPED", "QUEUED"}
 
 run_state := input.run_updated.run.state
 
