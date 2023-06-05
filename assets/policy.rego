@@ -5,7 +5,7 @@ package spacelift
 # and not for runs that are still in progress. Additionally, no data will be
 # generated for runs that never saw any action, i.e. runs that were created and
 # canceled, though approval policy failures will be reported.
-terminal := {"FAILED", "FINISHED", "DISCARDED", "STOPPED", "QUEUED"}
+terminal := {"FAILED", "FINISHED", "DISCARDED", "STOPPED"}
 
 run_state := input.run_updated.run.state
 
@@ -20,7 +20,7 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 	endpoint_id := endpoint.id
 
 	# Only send the webhook if the run reached a terminal state.
-	run_state == terminal[_]
+	#run_state == terminal[_]
 
 	payload := {"series": array.concat(
 		[
@@ -119,7 +119,7 @@ tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")]
 	sprintf("branch:%s", [input.run_updated.run.commit.branch]),
 	sprintf("drift_detection:%s", [input.run_updated.run.drift_detection]),
 	sprintf("run_type:%s", [lower(input.run_updated.run.type)]),
-	sprintf("final_state:%s", [lower(run_state)]),
+	sprintf("state:%s", [lower(run_state)]),
 	sprintf("space:%s", [lower(input.run_updated.stack.space.id)]),
 	sprintf("stack:%s", [lower(input.run_updated.stack.id)]),
     sprintf("worker_pool:%s", [worker_pool]),
@@ -133,4 +133,5 @@ worker_pool = name {
 
 # Only sample the webhook if the run reached a terminal state, and some metrics
 # have been collected.
-sample { run_state == terminal[_] }
+#sample { run_state == terminal[_] }
+#sample { }
